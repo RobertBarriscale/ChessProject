@@ -183,6 +183,11 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 		String pieceName = tmp.substring(0, (tmp.length()-4));
 		Boolean validMove = false;
 
+		int landingX = (e.getX()/75);
+		int landingY = (e.getY()/75);
+		int xMovement = Math.abs((e.getX()/75)=startX);
+		int yMovement = Math.abs((e.getY()/75)=startY);
+
 		/*
 			The only piece that has been enabled to move is a White Pawn...but we should really have this is a separate
 			method somewhere...how would this work.
@@ -194,6 +199,24 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 			If a Pawn makes it to the top of the other side, the Pawn can turn into any other piece, for 
 			demonstration purposes the Pawn here turns into a Queen.
 		*/
+		if(pieceName.equals("BlackQueen")){
+			validMove = true;
+		}
+		else if(pieceName.equals("BlackPawn")){
+			if(startY == 6){
+
+				/* if the pawn is making its first movement
+				the pawn can either move one square or two squares in the Y direction
+				as long as its moving forward and not backwards. there shouldnt be any movement in the x direction
+				 */
+				if((yMovement==1)||(yMovement == 2)&&(startY > landingY)&&(xMovement ==0))
+					validMove = true;
+			}
+			else{
+				validMove = false;
+			}
+
+		}
 		if(pieceName.equals("WhitePawn")){
 			if(startY == 1)
 			{
