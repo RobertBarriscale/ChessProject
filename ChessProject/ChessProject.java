@@ -185,8 +185,8 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 
 		int landingX = (e.getX()/75);
 		int landingY = (e.getY()/75);
-		int xMovement = Math.abs((e.getX()/75)=startX);
-		int yMovement = Math.abs((e.getY()/75)=startY);
+		int xMovement = Math.abs((e.getX()/75)-startX);
+		int yMovement = Math.abs((e.getY()/75)-startY);
 
 		/*
 			The only piece that has been enabled to move is a White Pawn...but we should really have this is a separate
@@ -209,8 +209,14 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 				the pawn can either move one square or two squares in the Y direction
 				as long as its moving forward and not backwards. there shouldnt be any movement in the x direction
 				 */
-				if((yMovement==1)||(yMovement == 2)&&(startY > landingY)&&(xMovement ==0))
+				if((yMovement == 1)||(yMovement == 2)&&(startY > landingY)&&(xMovement ==0)){
 					validMove = true;
+				}
+				else if((yMovement == 1)&&(startY > landingY)&&(xMovement == 1)){
+					if(piecePresent(e.getX(), e.getY())){
+						validMove = true;
+					}
+				}
 			}
 			else{
 				validMove = false;
