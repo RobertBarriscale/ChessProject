@@ -139,7 +139,21 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 			oponent = false; 
 		}		
 		return oponent;
-	}	
+	}
+
+	private Boolean checkBlackOponent(int newX, int newY){
+		Boolean oponent;
+		Component c1 = chessBoard.findComponentAt(newX, newY);
+		JLabel awaitingPiece = (JLabel)c1;
+		String tmp1 = awaitingPiece.getIcon().toString();
+		if(((tmp1.contains("White")))){
+			oponent = true;
+		}
+		else{
+			oponent = false;
+		}
+		return oponent;
+	}
  
 	/*
 		This method is called when we press the Mouse. So we need to find out what piece we have 
@@ -202,27 +216,71 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 		if(pieceName.equals("BlackQueen")){
 			validMove = true;
 		}
+
+		if(pieceName.contains("Knight")){
+			if(((xMovement == 1)&&(yMovement ==2)||(xMovement==2)&&(yMovement==1))){
+				if(!piecePresent(e.getX(), e.getY())){
+					validMove = true;
+				}
+				else{
+					if(pieceName.contains("White")){
+						if(checkWhiteOponent(e.getX(), e.getY())){
+							validMove = true;
+						}
+					}
+					else{
+						if(checkBlackOponent(e.getX(), e.getY())){
+							validMove = true;
+						}
+					}
+				}
+			}
+		}
+
 		else if(pieceName.equals("BlackPawn")){
-			if(startY == 6){
+			if(startY == 6){// The pawn's first move
 
 				/* if the pawn is making its first movement
 				the pawn can either move one square or two squares in the Y direction
 				as long as its moving forward and not backwards. there shouldnt be any movement in the x direction
 				 */
-				if((yMovement == 1)||(yMovement == 2)&&(startY > landingY)&&(xMovement ==0)){
-					validMove = true;
+				if(((yMovement==1)||(yMovement == 2))&&(startY > landingY)&&(xMovement ==0)){
+					if(yMovement == 2){
+						if(!piecePresent(e.getX(), e.getY())&&(!piecePresent(e.getX(), (e.getY()+75)))){
+							validMove = true;
+						}
+					}
+					else{
+						if(!piecePresent(e.getX(), e.getY())){
+							validMove = true;
+						}
+					}
 				}
+				/* This code refers to the rule where a pawn shouldnt move diagonally unless taking a piece. */
 				else if((yMovement == 1)&&(startY > landingY)&&(xMovement == 1)){
 					if(piecePresent(e.getX(), e.getY())){
-						validMove = true;
+						if(checkBlackOponent(e.getX(), e.getY())){
+							validMove = true;
+						}
 					}
 				}
 			}
-			else{
-				validMove = false;
+			else{// the pawn's making a move that isn't it's first
+				if(((yMovement==1))&&(startY > landingY)&&(xMovement ==0)){
+					if(!piecePresent(e.getX(), e.getY())){
+						validMove = true;
+					}
+				}
+				else if((yMovement == 1)&&(startY > landingY)&&(xMovement == 1)){
+					if(piecePresent(e.getX(), e.getY())){
+						if(checkBlackOponent(e.getX(), e.getY())){
+							validMove = true;
+						}
+					}
+				}
 			}
-
 		}
+
 		if(pieceName.equals("WhitePawn")){
 			if(startY == 1)
 			{
@@ -252,7 +310,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 			}
 			else{
 				int newY = e.getY()/75;
-				int newX = e.getX()/75;				
+				int newX = e.getX()/75;
 				if((startX-1 >=0)||(startX +1 <=7))
 				{
 					if((piecePresent(e.getX(), (e.getY())))&&((((newX == (startX+1)&&(startX+1<=7)))||((newX == (startX-1))&&(startX-1 >=0)))))
@@ -261,7 +319,7 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 							validMove = true;
 							if(startY == 6){
 								success = true;
-							}						
+							}
 						}
 						else{
 							validMove = false;
@@ -277,17 +335,17 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 							}
 							else{
 								validMove = false;
-							}				
+							}
 						}
 						else{
-							validMove = false;	
+							validMove = false;
 						}
 					}
 				}
 				else{
 					validMove = false;
-				}				
-			}			
+				}
+			}
 		}
 		if(!validMove){		
 			int location=0;
