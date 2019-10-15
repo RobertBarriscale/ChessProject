@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 /*
@@ -65,10 +64,10 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 		pieces = new JLabel( new ImageIcon("WhiteKnight.png") );
 		panels = (JPanel)chessBoard.getComponent(6);
 	    panels.add(pieces);
-		pieces = new JLabel( new ImageIcon("WhiteBishup.png") );
+		pieces = new JLabel( new ImageIcon("WhiteBishop.png") );
 		panels = (JPanel)chessBoard.getComponent(2);
 	    panels.add(pieces);
-		pieces = new JLabel( new ImageIcon("WhiteBishup.png") );
+		pieces = new JLabel( new ImageIcon("WhiteBishop.png") );
 		panels = (JPanel)chessBoard.getComponent(5);
 	    panels.add(pieces);
 		pieces = new JLabel( new ImageIcon("WhiteKing.png") );
@@ -94,10 +93,10 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 		pieces = new JLabel( new ImageIcon("BlackKnight.png") );
 		panels = (JPanel)chessBoard.getComponent(62);
 	    panels.add(pieces);
-		pieces = new JLabel( new ImageIcon("BlackBishup.png") );
+		pieces = new JLabel( new ImageIcon("BlackBishop.png") );
 		panels = (JPanel)chessBoard.getComponent(58);
 	    panels.add(pieces);
-		pieces = new JLabel( new ImageIcon("BlackBishup.png") );
+		pieces = new JLabel( new ImageIcon("BlackBishop.png") );
 		panels = (JPanel)chessBoard.getComponent(61);
 	    panels.add(pieces);
 		pieces = new JLabel( new ImageIcon("BlackKing.png") );
@@ -215,6 +214,26 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 		*/
 		if(pieceName.equals("BlackQueen")){
 			validMove = true;
+		}
+
+		if(pieceName.contains("Bishop")){
+			Boolean inTheWay = false;
+			int distance = Math.abs(startX-landingX);
+			if(((landingX < 0)||(landingX > 7))||((landingY < 0)||(landingY > 7))){
+				validMove = false;
+			}
+			else{
+				validMove = true;
+				if(Math.abs(startX-landingX)==Math.abs(startY-landingY)){
+					if((startX-landingX < 0)&&(startY-landingY < 0)){
+						for(int i=0; i < distance;i++){
+							if(piecePresent((initialX+(i*75)), (initialY+(i*75)))){
+								inTheWay = true;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		if(pieceName.contains("Knight")){
