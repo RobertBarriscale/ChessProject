@@ -233,6 +233,31 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 						}
 					}
 				}
+				else if((startX-landingX < 0)&&(startY-landingY > 0)){
+					for(int i=0; i < distance;i++){
+						if(piecePresent((initialX+(i*75)), (initialY-(i*75)))){
+							inTheWay = true;
+						}
+					}
+				}
+				else if((startX-landingX > 0)&&(startY-landingY >0)){
+					for(int i=0; i < distance;i++){
+						if(piecePresent((initialX-(i*75)), (initialY-(i*75)))){
+							inTheWay = true;
+						}
+					}
+				}
+				else if((startX-landingX > 0)&&(startY-landingY < 0)){
+					for(int i=0; i < distance;i++){
+						if(piecePresent((initialX-(i*75)), (initialY+(i*75)))){
+							inTheWay = true;
+						}
+					}
+				}
+				if(inTheWay){
+					validMove = false;
+				}
+
 			}
 		}
 
