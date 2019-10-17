@@ -212,6 +212,158 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 			If a Pawn makes it to the top of the other side, the Pawn can turn into any other piece, for 
 			demonstration purposes the Pawn here turns into a Queen.
 		*/
+
+		if(pieceName.contains("King")){
+			Boolean intheWay = false;
+			int distance = Math.abs(startX-landingX);
+			if(((landingX < 0)||(landingX > 7)||((landingY < 0)||(landingY > 7)))){
+				validMove = false;
+			}
+			else{
+				if(((Math.abs(startX-landingX)!=0)&&(Math.abs(startY-landingY) == 0))||((Math.abs(startX-landingX)==0)&&(Math.abs(landingY-startY)!=0))){
+					if(Math.abs(startX-landingX)!=0){
+						int xmovement = Math.abs(startX-landingX);
+						if(startX-landingX > 0){
+							for(int i=0;i < xmovement;i++){
+								if(piecePresent(initialX-(i*75), e.getY())){//checks to see if a friendly piece is in the way
+									intheWay = true;//blocks rook from moving onto or past friendly piece if it is in the way
+									break;
+								}
+								else{
+									intheWay = false;//tells rook there is nothing in the way
+								}
+							}
+						}
+						else{
+							for(int i=0; i < xmovement;i++){//controls movement in x direction and constantly checks if there is a friendly piece in the way
+								if(piecePresent(initialX+(i*75), e.getY())){
+									intheWay = true;
+									break;
+								}
+								else{
+									intheWay = false;
+								}
+							}
+						}
+					}
+					else{
+						int ymovement = Math.abs(startY-landingY);
+						if(startY-landingY > 0){
+							for(int i=0; i < ymovement;i++){//controls movement in the y direction and constantly checks to see if there is a friendly piece in the way
+								if(piecePresent(e.getX(),initialY+(i*75))){
+									intheWay = true;
+									break;
+								}
+								else{
+									intheWay = false;
+								}
+							}
+						}
+						else{
+							for(int i=0; i < ymovement;i++){
+								if(piecePresent(e.getX(), initialY+(i*75))){
+									intheWay = true;
+									break;
+								}
+								else{
+									intheWay = false;
+								}
+							}
+						}
+					}
+
+					if(intheWay){
+						validMove = false;// if there is something in the way, the rook cannot move to desired square
+					}
+					else{
+						if(piecePresent(e.getX(), (e.getY()))){
+							if(pieceName.contains("White")){
+								if(checkWhiteOponent(e.getX(), e.getY())){//checks if the piece present is the white opponent's
+									validMove = true;//allows rook to capture the white opponent's piece
+								}
+								else{
+									validMove = false;//does not allow rook to take its own piece
+								}
+							}
+							else{
+								if(checkBlackOponent(e.getX(), e.getY())){//checks if the piece present is the black opponent's
+									validMove = true;//allows rook to capture the black opponent's piece
+								}
+								else{
+									validMove = false;//does not allow rook to take its own piece
+								}
+							}
+						}
+						else{
+							validMove = true;
+						}
+					}
+				}
+				else{
+					validMove = true; //allows bishop to move when not blocked by friendly piece
+					if(Math.abs(startX-landingX)==Math.abs(startY-landingY)){
+						if((startX-landingX < 0)&&(startY-landingY < 0)){
+							for(int i=0; i <distance;i++){
+								if(piecePresent((initialX+(i*75)), (initialY+(i*75)))){
+									intheWay = true;
+								}
+							}
+						}
+						else if((startX-landingX < 0)&&(startY-landingY >0)){
+							for(int i=0; i < distance;i++){
+								if(piecePresent((initialX+(i*75)), (initialY-(i*75)))){
+									intheWay = true;
+								}
+							}
+						}
+						else if((startX-landingX > 0)&&(startY-landingY > 0)){
+							for(int i=0; i < distance;i++){
+								if(piecePresent((initialX-(i*75)), (initialY-(i*75)))){
+									intheWay = true;
+								}
+							}
+						}
+						else if((startX-landingX > 0)&&(startY-landingY < 0)){
+							for(int i=0; i < distance;i++){
+								if(piecePresent((initialX-(i*75)), (initialY+(i*75)))){
+									intheWay = true;
+								}
+							}
+						}
+						if (intheWay) {
+							validMove = false;
+						}//allows bishop to move diagonally
+						else{
+							if(piecePresent(e.getX(), (e.getY()))){
+								if(pieceName.contains("White")){
+									if(checkWhiteOponent(e.getX(), e.getY())){
+										validMove = true;
+									}//allows black piece to take opponents white piece
+									else{
+										validMove = false;
+									}//blocks bishop from taking its own piece
+								}
+								else{
+									if(checkBlackOponent(e.getX(), e.getY())){
+										validMove = true;
+									}//allows white bishop to take opponents black piece
+									else{
+										validMove = false;
+									}//blocks white bishop from taking its own piece
+								}
+							}
+							else{
+								validMove = true;
+							}
+						}
+					}
+					else{
+						validMove = false;
+					}
+				}
+			}
+		}
+
 		if(pieceName.contains("Queen")){
 			Boolean intheWay = false;
 			int distance = Math.abs(startX-landingX);
@@ -356,9 +508,11 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 							}
 						}
 					}
+					else{
+						validMove = false;
+					}
 				}
 			}
-
 		}
 
 		if(pieceName.contains("Rook")){
