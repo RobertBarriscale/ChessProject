@@ -275,6 +275,9 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 					if(intheWay){
 						validMove = false;// if there is something in the way, the king cannot move to desired square
 					}
+					else if((xMovement > 1)||(yMovement > 1)){
+						validMove = false;
+					}
 					else{
 						if(piecePresent(e.getX(), (e.getY()))){
 							if(pieceName.contains("White")){
@@ -333,6 +336,9 @@ public class ChessProject extends JFrame implements MouseListener, MouseMotionLi
 						if (intheWay) {
 							validMove = false;
 						}//allows king to move diagonally
+						else if((xMovement > 1)&&(yMovement > 1)){
+							validMove = false;
+						}
 						else{
 							if(piecePresent(e.getX(), (e.getY()))){
 								if(pieceName.contains("White")){
